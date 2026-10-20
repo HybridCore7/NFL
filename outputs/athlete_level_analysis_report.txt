@@ -1,0 +1,35 @@
+Athlete-level movement analysis report
+====================================
+
+Dataset summary:
+- Athletes retained: 510
+- Draft-year counts: {2023: 160, 2024: 177, 2025: 173}
+- Movement features were aggregated to athlete-level medians across valid attempts; repeated attempts were never treated as independent athletes.
+- Three-cone cut features were excluded from the primary athlete-level analysis because their real-data coverage is still limited.
+
+Position-level correlation summary:
+- DB: athletes=122, pearson_r=0.206 [0.014, 0.384], spearman_rho=0.219 [0.020, 0.371], median_early_accel=1.176
+- WR: athletes=107, pearson_r=0.160 [-0.041, 0.348], spearman_rho=0.151 [-0.055, 0.353], median_early_accel=1.778
+- TE: athletes=42, pearson_r=0.273 [-0.071, 0.560], spearman_rho=0.218 [-0.107, 0.540], median_early_accel=1.583
+
+Outcome-window audit:
+- The available labels in player_career_successes.csv are lifetime aggregate totals, not season-specific outcomes.
+- Draft classes have unequal exposure: 2023 has up to three observed seasons, 2024 up to two, and 2025 up to one.
+- Therefore, a common retrospective outcome window does not exist across the full 2023-2025 cohort without dropping the most recent classes.
+- The next valid predictive experiment should use a single, common observation window (for example: first two seasons for the 2023-2024 cohort, or first season for all 2023-2025 with explicit censoring), and all preprocessing should remain inside training folds.
+- Draft capital should remain a separate baseline; it represents market prior evaluation and should not be mixed with athletic measurements.
+
+Baseline definitions:
+1. Conventional Combine baseline: combine height, weight, 40-yard time, vertical, broad jump, ten-yard split, short shuttle, bench reps, etc.
+2. Draft-capital baseline: draft round and overall pick are held in a separate frame and never treated as athletic measurements.
+3. Conventional + movement baseline: conventional Combine features plus athlete-level movement summaries, excluding the three-cone cut metrics until their coverage is adequate.
+
+Outcome label summary:
+- career_offensive_snaps: non_missing=510, zero=297, positive=213, median=0.000, max=3303.000
+- career_defensive_snaps: non_missing=510, zero=317, positive=193, median=0.000, max=2666.000
+- career_special_teams_snaps: non_missing=510, zero=108, positive=402, median=53.000, max=957.000
+- career_games_active: non_missing=510, zero=88, positive=422, median=17.000, max=51.000
+- career_games_started: non_missing=510, zero=208, positive=302, median=2.000, max=50.000
+- ap_all_pro_1st_team: non_missing=510, zero=504, positive=6, median=0.000, max=1.000
+- ap_all_pro_2nd_team: non_missing=510, zero=508, positive=2, median=0.000, max=1.000
+- pro_bowl_original_ballot: non_missing=510, zero=499, positive=11, median=0.000, max=2.000

@@ -1,0 +1,55 @@
+Phase 18 — Robustness and Scientific Validity Audit
+====================================================
+
+Verified findings:
+- 2025 WR athlete-seasons retained for the audit: 94
+- Minimal conventional feature set: combine_height, combine_weight, forty, vertical, broad_jump, ten_yd_split
+- Movement feature set: early_accel_1s_median, max_speed_median, time_to_90pct_max_speed_s_median, path_length_yd_median, net_displacement_yd_median, signed_max_decel_median
+- Full conventional set retained only 8 complete cases, so the original full baseline is not defensible.
+
+Target semantics audit:
+- The prediction target is constructed from player_play.csv as the per-athlete-season sum of target values, not from receptions or a separate route table.
+- The target is built by merging player_play to games and players, keeping only WR rows with combine_position == 'WR', and grouping by season, draft_year, nfl_id.
+- Each modeling row represents one athlete-season; the target is the sum of target_num across all rows for that athlete-season in 2025.
+- This is a bounded opportunity proxy, not a validated actual-routes measure or a reception count. The script does not claim that it equals true route volume or receiving production.
+- Validation check: there are no duplicate athlete-season rows after aggregation and no duplicate rows remain in the 2025 WR dataset.
+
+Original Phase 17 implementation audit:
+- Baseline RMSE on the original 42/16 split: 39.639
+- Extended RMSE on the same split: 42.606
+- RMSE increase from extension: 2.967 (7.5% relative)
+- Held-out sample size on the original split: 16 athletes.
+- Training sample size on the original split: 62 athletes.
+- The Phase 17 implementation passes row alignment and shared-sample checks; the original reported numbers are reproducible from the existing code and outputs.
+
+Mean-prediction baseline audit:
+- All 78 eligible athletes: mean=36.897, median=25.000, std=33.902, min=0.000, max=127.000, zeros=2.
+- Training set mean-prediction RMSE: 32.660
+- Test-set mean-prediction RMSE: 37.408
+- Baseline model RMSE: 39.639; extended model RMSE: 42.606
+- The simple mean forecast is a strong comparator here because the target is highly variable and the sample is small; neither model clearly beats the mean on the original test split.
+
+Largest error drivers:
+- nfl_id=57223, draft_year=2024: actual=115.0, baseline_pred=35.673, extended_pred=13.060, baseline_abs_error=79.327, extended_abs_error=101.940, delta_sq_error=4098.826
+- nfl_id=55887, draft_year=2023: actual=83.0, baseline_pred=20.710, extended_pred=0.284, baseline_abs_error=62.290, extended_abs_error=82.716, delta_sq_error=2961.877
+- nfl_id=58239, draft_year=2025: actual=89.0, baseline_pred=46.979, extended_pred=33.221, baseline_abs_error=42.021, extended_abs_error=55.779, delta_sq_error=1345.525
+- nfl_id=56559, draft_year=2023: actual=31.0, baseline_pred=41.686, extended_pred=50.191, baseline_abs_error=10.686, extended_abs_error=19.191, delta_sq_error=254.098
+- nfl_id=56060, draft_year=2023: actual=1.0, baseline_pred=-1.472, extended_pred=-14.641, baseline_abs_error=2.472, extended_abs_error=15.641, delta_sq_error=238.536
+
+Split sensitivity (reproducible alternative seeds, same feature set, same athlete pool):
+- Mean RMSE difference across splits: -0.162
+- Median RMSE difference across splits: 0.825
+- Number of splits where the extension helped: 2 / 5
+- Number of splits where the extension hurt: 3 / 5
+- These repeated splits are not independent external validation; they are a sensitivity check for the same small dataset.
+
+Redundancy diagnostics:
+- movement_movement: path_length_yd_median vs net_displacement_yd_median = 0.802
+
+Limitations and recommendations:
+- This is a narrow 2025 WR analysis with 78 complete cases and a 16-person test split; external reliability is limited.
+- Do not claim that movement features have no predictive value in general; the result is restricted to this audited sample and the validated target proxy.
+- The original Phase 17 finding is reproducible and scientifically cautious, but it is not strong enough to support a broad scouting claim.
+- The strongest recommendation is to keep the result framed as a bounded, inconclusive audit rather than a negative verdict on movement features.
+
+Final verdict: INCONCLUSIVE.

@@ -1,0 +1,11 @@
+outcome_name,source_table,source_columns,unit,meaning,aggregation_level,observation_window,n_unique_athletes,n_non_missing,coverage_pct,is_cumulative,exposure_adjusted,category
+career_offensive_snaps,player_career_successes.csv,['career_offensive_snaps'],snaps,lifetime offensive snap count,athlete-lifetime,career total,510,510,100.0,True,False,participation
+career_defensive_snaps,player_career_successes.csv,['career_defensive_snaps'],snaps,lifetime defensive snap count,athlete-lifetime,career total,510,510,100.0,True,False,participation
+career_special_teams_snaps,player_career_successes.csv,['career_special_teams_snaps'],snaps,lifetime special-teams snap count,athlete-lifetime,career total,510,510,100.0,True,False,participation
+career_games_active,player_career_successes.csv,['career_games_active'],games,lifetime active games,athlete-lifetime,career total,510,510,100.0,True,False,participation
+career_games_started,player_career_successes.csv,['career_games_started'],games,lifetime games started,athlete-lifetime,career total,510,510,100.0,True,False,participation
+ap_all_pro_1st_team,player_career_successes.csv,['ap_all_pro_1st_team'],selections,career Pro Bowl / All-Pro selection count,athlete-lifetime,career total,510,510,100.0,True,False,success
+ap_all_pro_2nd_team,player_career_successes.csv,['ap_all_pro_2nd_team'],selections,career Pro Bowl / All-Pro selection count,athlete-lifetime,career total,510,510,100.0,True,False,success
+pro_bowl_original_ballot,player_career_successes.csv,['pro_bowl_original_ballot'],selections,career Pro Bowl ballot count,athlete-lifetime,career total,510,510,100.0,True,False,success
+route_count_wr,player_play.csv,route_ran,plays with route_ran populated,season-level route volume proxy,athlete-season,season,106,199,100.0,False,False,opportunity
+target_count_wr,player_play.csv,target,target count,season-level target opportunity proxy,athlete-season,season,106,199,100.0,False,False,opportunity

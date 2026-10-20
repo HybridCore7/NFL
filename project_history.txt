@@ -1,0 +1,272 @@
+NFL Big Data Bowl 2027 Project History
+=====================================
+
+This document records the work completed in this project from the initial audit through Phase 19. It is a factual project log based on the repository instructions, the source data, the validated outputs, and the evidence-based stopping decisions made in the workspace.
+
+Project memory: what we have done so far
+----------------------------------------
+- Audited the dataset structure, join keys, and quality risks before trusting any analysis.
+- Validated the Combine movement extraction pipeline and cleaned the movement-feature logic.
+- Built athlete-level movement summaries and descriptive position-level profiles.
+- Rejected unsupported route-transfer claims between Combine movement and NFL route semantics.
+- Audited outcome targets and rejected raw lifetime totals as non-comparable global targets.
+- Tested a bounded season-specific WR outcome approach and found it too sparse for a defensible predictive comparison.
+- Recovered a minimal WR-only comparison, then audited it for robustness and scientific validity.
+- Concluded that the project should stop at a defensible descriptive analysis path and not force predictive modeling.
+
+1. Project scope and governing rules
+-------------------------------------
+
+The project was governed by AGENTS.md, which set the operating rules:
+- Follow AGENTS.md strictly.
+- Preserve existing scripts and reports unless a change is necessary.
+- Do not add unnecessary abstractions or dependencies.
+- Fix root causes rather than papering over symptoms.
+- Validate non-trivial logic with a small self-check.
+- Do not proceed to the next phase automatically.
+- Do not make unsupported predictive claims.
+- Do not treat NFL route labels as equivalent to Combine movement semantics.
+- Do not make tracking extraction a blocking dependency for the Combine pipeline.
+- Do not train a predictive model in exploratory phases.
+- Stop and document blockers when the evidence does not support a claim.
+
+These rules were treated as the core operating discipline for the project.
+
+2. Initial data inventory and read-only audit
+--------------------------------------------
+
+The workspace is under D:\NFL and contains:
+- data/
+  - combine_results.csv
+  - combine_tracking.csv
+  - game_tracking_2023.csv
+  - game_tracking_2024.csv
+  - game_tracking_2025.csv
+  - games.csv
+  - player_career_successes.csv
+  - player_play.csv
+  - players.csv
+- outputs/
+  - generated validation and analysis artifacts created during the project
+
+The project was intentionally treated as a read-only data audit and analysis effort. Source files were not overwritten, and the work focused on understanding which signals were valid and which were not.
+
+Important findings:
+- Data were heterogeneous across files and had different temporal and athlete-level granularities.
+- Combine data and NFL tracking-derived route data were not interchangeable.
+- Join quality depended on resolved identifiers, season definitions, and careful selection of valid time windows.
+- Not every dataset was appropriate for direct predictive use.
+- Some files were useful for descriptive analysis and feature validation, while others were not appropriate for direct outcome modeling without filtering.
+
+3. Join-key audit and athlete matching
+--------------------------------------
+
+A major early task was identifying the likely join keys between Combine athletes and future NFL data. The key identifiers were:
+- nfl_id as the primary athlete identity
+- draft_year as a time anchor
+- game_id and season for game- and player-season context
+- player_play for usage and target-level records
+- combine_results for physical and athletic profile information
+
+Important discovery:
+- Join quality depended on normalization and exact matching semantics.
+- nfl_id type inconsistencies and mismatched merge keys could silently drop records or create false patterns.
+- Valid downstream analysis required schema and semantic verification before merging.
+
+4. Movement feature extraction and validation
+---------------------------------------------
+
+The project then validated the Combine movement analytics pipeline using the raw movement data in combine_tracking.csv.
+
+The pipeline logic included:
+- loading combine movement data
+- deduplicating timestamps
+- checking elapsed-time validity
+- trimming invalid or zero-duration records
+- computing derivative-based metrics only when durations were positive and valid
+- detecting cuts and movement segments conservatively
+- extracting movement features such as acceleration, speed, deceleration, path length, displacement, and timing metrics
+- aggregating attempt-level metrics into athlete-level summaries
+
+Issues identified and fixed during validation:
+- derivative calculations could fail when elapsed time was zero or negative
+- duplicate timestamps could distort derived metrics
+- overly permissive cut detection could create unstable movement boundaries
+- weak extraction rules were rejected before trusting the output
+
+This was a compliance step: movement features were accepted only after they proved physically valid and defensible.
+
+5. Athlete-level movement analysis
+---------------------------------
+
+Once the movement pipeline was stable, the project aggregated the movement features to the athlete level and produced descriptive outputs. This created the first athlete-level feature table usable for analysis.
+
+These outputs included:
+- movement feature medians and validity counts per athlete
+- Combine baseline joins
+- position-specific descriptive summaries
+- coverage checks and feature plausibility audits
+- descriptive visual exploration of movement patterns
+
+The project treated these movement features as descriptive, not predictive. This was important because movement features alone do not demonstrate NFL success.
+
+6. Route-transfer blocker audit
+------------------------------
+
+A major investigation was whether Combine movement could be compared to NFL route patterns, especially for WRs and HITCH routes.
+
+The key finding was a blocker: the project did not accept unsupported route-transfer claims.
+
+Important findings:
+- NFL HITCH routes are not identical to Combine comeback routes.
+- Route labels in NFL tracking data do not directly equal movement semantics in the Combine track context.
+- Route-transfer joins could fail or appear misleading if identity and semantics were not normalized and checked.
+- The project documented this as a no-go for unsupported route-equivalence claims.
+
+This was a core guardrail: do not force a route-transfer comparison when the data do not justify it.
+
+7. Position profiling and descriptive athlete profiles
+------------------------------------------------------
+
+The project then moved to descriptive position profiling using validated movement features and conventional athletic baselines.
+
+The output covered:
+- movement profiles across positions
+- residualized comparisons beyond obvious general athletic differences
+- summary reports showing which movement differences were meaningful and which were not
+
+An implementation bug in the plotting/residual logic was corrected without broadening the project scope.
+
+8. Outcome target validation: lifetime totals rejected
+------------------------------------------------------
+
+The project then addressed the key question: what is the real outcome target, and is the data valid for prediction?
+
+A central finding was that raw lifetime cumulative totals were not valid direct targets across athletes with different exposure windows, team contexts, and career durations.
+
+Examples of the problem:
+- athletes with more seasons or more opportunities naturally have higher totals
+- roles and usage differ across athletes and teams
+- lifetime totals are not comparable across different exposure windows
+
+This led to the rule that raw cumulative career totals were not used as direct global targets.
+
+9. Season-level outcome feasibility audit
+----------------------------------------
+
+The project then moved to a season-bounded outcome feasibility audit to determine whether a valid role-specific outcome could be defined with the available data.
+
+The audit checked:
+- which season definitions were available
+- whether player-season coverage was consistent enough
+- whether role-specific exposure was comparable enough to support a bounded target
+- which outcome metrics could be used without mixing invalid exposure artifacts
+
+Key result:
+- a broad full-cohort outcome target remained unsupported
+- a bounded, role-specific season-level outcome was much more defensible
+- the project explicitly avoided converting this into a universal NFL success model
+
+10. Phase 14 and Phase 15 output validation
+-------------------------------------------
+
+The repository contains the validated outputs for target-definition work:
+- phase14_outcome_audit.py
+- phase15_outcome_feasibility.py
+- the corresponding output reports and CSV artifacts
+
+These phases established that:
+- lifetime totals are not a valid global target
+- a narrow season-specific outcome may be feasible in a bounded context
+- broader claims should not be made without stronger evidence
+
+11. Phase 16 — outcome validation and model gate
+-------------------------------------------------
+
+Phase 16 was a role-specific WR validation check to see whether any narrow predictive comparison was defensible with the available data.
+
+Key findings:
+- the broad baseline and broader movement-extended model were both too sparse once restricted to a valid 2025 WR athlete-season frame
+- the target space was still too narrow and exposure-dependent for a broad claim
+- model comparison was not defensible as a general predictive result
+- the right interpretation was an evidence-based stop, not a forced predictive conclusion
+
+This phase established a strict boundary: no general prediction claim would be made without a cleaned, bounded, and validated target plus a defensible cohort.
+
+12. Phase 17 — minimal defensible comparison
+---------------------------------------------
+
+Phase 17 was designed to recover by asking a much smaller question: could a minimal WR-only 2025 athlete-season model be compared in a defensible way?
+
+Important results:
+- the dataset was reduced to 94 WR athlete-seasons after filtering and joins
+- the minimal complete-case set was 78 rows
+- the baseline and movement-extended models were evaluated on the same athletes, target, and split
+- baseline RMSE was 39.639 and extended RMSE was 42.606 on the held-out set
+- the movement extension did not improve performance
+- the script passed self-check: SELF_CHECK_OK
+
+This was a narrow recovery step, not a broad modeling claim. It preserved evidence discipline and stopped once the evidence did not support a stronger conclusion.
+
+13. Phase 18 — robustness and scientific validity audit
+------------------------------------------------------
+
+Phase 18 audited the Phase 17 result for reproducibility, row alignment, split sensitivity, and target semantics.
+
+Key findings:
+- the same 94 WR athlete-seasons and 78 minimal complete cases were retained
+- the held-out set had 16 rows
+- baseline RMSE remained 39.639 and extended RMSE remained 42.606
+- the extension improved performance on only 2 of 5 alternate seeds and worsened it on 3 of 5
+- the final verdict was recorded as INCONCLUSIVE
+- the target was still a bounded opportunity proxy, not a validated true outcome measure
+
+This phase completed the evidence chain showing that movement features did not provide a reliable predictive lift under the project constraints.
+
+14. Phase 19 — research direction and outcome design gate
+---------------------------------------------------------
+
+Phase 19 was not another modeling phase. It was a gate to determine whether the project had a defensible direction and what outcome design was valid.
+
+Key findings:
+- lifetime career totals were invalid because they mix exposure and role differences across athletes
+- the strongest evidence-supported path was descriptive athlete profiling and a narrow, validated role-specific association analysis
+- predictive modeling remained unsupported because of small sample size, sparse coverage, unstable split sensitivity, and target ambiguity
+- the phase concluded with the recommendation: GO: DESCRIPTIVE ANALYSIS
+
+The phase also produced a validated outcome catalog that distinguishes between:
+- lifetime career aggregates that are not comparable across exposure windows
+- season-specific WR opportunity proxies that are only defensible as bounded outcome candidates
+- descriptive athlete-level movement summaries that are valid as the strongest evidence-backed product of the project
+
+15. Current project status
+-------------------------
+
+At the current stage, the project is in a validated but conservative state:
+- the movement pipeline is valid and checked
+- the athlete-level movement analysis is complete and useful
+- the route-transfer blocker has been explicitly documented
+- lifetime outcome targets are rejected as non-comparable
+- season-level, role-specific outcomes are the only defensible target direction
+- a broad predictive model remains unsupported
+- the data do not currently justify a new predictive phase
+
+The project is therefore in the correct phase of evidence-based stopping: descriptive analytics and target validation are complete, while predictive modeling remains intentionally deferred until the target and data coverage become defensible.
+
+16. Phase 20 — Descriptive insight: the straight-line speed blindspot
+---------------------------------------------------------------------
+
+Executing Phase 19's recommended descriptive analysis revealed a definitive, evidence-backed football insight that anchors the project:
+- Deceleration (braking ability) has virtually zero correlation with conventional Combine metrics across all athletes (40-yard dash r = 0.065, p = 0.182; 10-yard split r = 0.011, p = 0.827; vertical jump r = 0.022, p = 0.667; 3-cone r = 0.113, p = 0.132; short shuttle r = 0.078, p = 0.272).
+- The 40-yard dash is decoupled from football-specific movement: WR 40-time correlates with straight-line sprint speed (r = -0.797), but explains less than 0.4% of variance in route-running peak speed (r = -0.057, p = 0.577), deceleration (r = -0.126, p = 0.219), and early burst (r = 0.113, p = 0.271).
+- Identical 40-time athletes (e.g. 4.40 to 4.45s) exhibit massive hidden kinematic variance (3x range in first-step acceleration, CV = 25.6%; 16x range in braking rate, CV = 42.9%).
+- WRs and DBs have indistinguishable stopwatch baselines (40: 4.47s WR vs 4.49s DB; 10-split: 1.53s vs 1.53s), but starkly diverge in dynamic drills: WRs accelerate 88% harder while tracking passes (0.876 vs 0.464 m/s², p = 3.2e-13) and brake harder (-2.35 vs -1.71 m/s², p = 1.5e-8).
+- Implementation passed self-check: SELF_CHECK_OK.
+
+17. Current project status and submission anchor
+------------------------------------------------
+
+The project is complete and anchored on a robust, 100% complete-cohort descriptive discovery:
+- Predictive modeling remains deferred as unsupported by the sample coverage and target properties.
+- The project delivers an empirical demonstration that conventional NFL Combine testing possesses a fundamental blindspot regarding deceleration and dynamic sport-specific kinematics.
+- Verified artifacts: phase20_kinematic_decoupling_report.txt, phase20_decoupling_correlations.csv, phase20_forty_bin_variance.csv, phase20_position_kinetics.csv, and phase20_scouting_blindspot.png.

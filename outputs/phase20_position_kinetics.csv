@@ -1,0 +1,6 @@
+combine_position,n_athletes,mean_weight_lbs,mean_max_speed_ms,mean_decel_ms2,mean_braking_force_N,mean_momentum_kg_ms,mean_kinetic_energy_J
+DB,122,195.3,7.7,2.12,187.7,682.6,2634.4
+DL,118,281.6,6.82,2.86,360.6,868.0,2958.0
+OL,121,314.5,6.29,1.92,273.1,897.1,2828.2
+TE,42,249.4,7.6,1.59,180.2,859.5,3274.7
+WR,107,197.2,7.59,1.91,170.7,679.0,2579.5

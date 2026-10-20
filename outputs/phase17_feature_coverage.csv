@@ -1,0 +1,16 @@
+feature_group,feature,n_non_missing,n_missing,coverage_pct,selected_for_minimal_baseline
+conventional,bench_reps,26,68,27.659574468085108,False
+conventional,broad_jump,83,11,88.29787234042553,True
+conventional,combine_height,94,0,100.0,True
+conventional,combine_weight,94,0,100.0,True
+conventional,forty,85,9,90.42553191489363,True
+conventional,short_shuttle,30,64,31.914893617021278,False
+conventional,ten_yd_split,85,9,90.42553191489363,True
+conventional,three_cone,26,68,27.659574468085108,False
+conventional,vertical,84,10,89.36170212765957,True
+movement,early_accel_1s_median,94,0,100.0,False
+movement,max_speed_median,94,0,100.0,False
+movement,net_displacement_yd_median,94,0,100.0,False
+movement,path_length_yd_median,94,0,100.0,False
+movement,signed_max_decel_median,94,0,100.0,False
+movement,time_to_90pct_max_speed_s_median,94,0,100.0,False

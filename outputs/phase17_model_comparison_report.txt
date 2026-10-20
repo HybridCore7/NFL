@@ -1,0 +1,19 @@
+Phase 17 — minimal baseline-versus-extended WR comparison
+========================================================
+
+Total complete-case sample: 78
+Training sample: 62
+Test sample: 16
+Target mean in test split: 34.562
+
+Baseline RMSE: 39.639
+Baseline MAE: 34.504
+Baseline R2: -0.130
+Extended RMSE: 42.606
+Extended MAE: 33.505
+Extended R2: -0.305
+
+Decision: CONDITIONAL GO.
+- The comparison uses the same 2025 WR athletes, the same target definition, the same train/test split, and the same missing-data handling policy.
+- The dataset is small and the result is therefore limited; it should be read as a bounded descriptive model check, not as proof of hidden scouting value.
+- This is the smallest defensible comparison available under the current coverage constraints.

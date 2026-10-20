@@ -1,0 +1,53 @@
+Phase 15 — Season-level NFL outcome feasibility audit
+====================================================
+
+Objective:
+- Determine whether the supplied season-level play data support a defensible NFL outcome that can be linked to a validated Combine movement feature set.
+- This is a feasibility audit, not a modeling phase.
+
+Data inspected:
+- data/player_play.csv
+- data/games.csv
+- data/players.csv
+- data/combine_results.csv
+- schema samples from game_tracking_2023.csv, game_tracking_2024.csv, and game_tracking_2025.csv.
+
+Season and identifier coverage:
+- games.csv contains seasons [2023, 2024, 2025].
+- player_play.csv contains per-play player entries keyed by game_id + play_id + nfl_id; it is not a player-season table by itself.
+- The play-level table already shows the main issue: it records participation and event instances, not a single pre-computed NFL performance target.
+
+Tracking-event semantics:
+- game_tracking_2023.csv sample events: ['autoevent_passinterrupted', 'ball_snap', 'first_contact', 'handoff', 'line_set', 'man_in_motion', 'out_of_bounds', 'pass_arrived', 'pass_forward', 'pass_outcome_caught'] (non-null event rows sampled=137)
+- game_tracking_2024.csv sample events: ['autoevent_playaction', 'ball_snap', 'dropped_pass', 'first_contact', 'fumble', 'fumble_offense_recovered', 'handoff', 'line_set', 'man_in_motion', 'out_of_bounds'] (non-null event rows sampled=141)
+- game_tracking_2025.csv sample events: ['autoevent_passinterrupted', 'ball_snap', 'dropped_pass', 'first_contact', 'fumble', 'fumble_offense_recovered', 'handoff', 'man_in_motion', 'out_of_bounds', 'pass_arrived'] (non-null event rows sampled=131)
+
+Candidate outcome definitions:
+- player-season WR route count = count of rows where route_ran is not null for a given nfl_id-season.
+- player-season WR target count = sum of target indicators for the same nfl_id-season.
+- player-season TE route count = count of rows where route_ran is not null for a given nfl_id-season.
+- player-season DB tackle-plus-assist count = sum of tackle + assist for a given nfl_id-season.
+
+Why these are not universally comparable:
+- They are position-specific, not a single cross-position outcome.
+- route_ran and target are valid for pass-catchers but not for all Combine athletes.
+- tackle and assist are valid defensive event totals but do not map cleanly onto the pass-catching movement features used for WR/DB comparisons.
+- A season is a consistent time window only within a single NFL season; it does not solve the cohort exposure problem across 2023, 2024, and 2025 when multi-season totals are used.
+
+Candidate coverage summary:
+- wr_route_count_season: position=WR, unit=routes, window=player-season, athlete_seasons=199, athletes=106, 2023=39, 2024=66, 2025=94
+- wr_target_count_season: position=WR, unit=targets, window=player-season, athlete_seasons=199, athletes=106, 2023=39, 2024=66, 2025=94
+- te_route_count_season: position=TE, unit=routes, window=player-season, athlete_seasons=71, athletes=38, 2023=11, 2024=24, 2025=36
+- db_tackle_plus_assist_count_season: position=DB, unit=tackles_plus_assists, window=player-season, athlete_seasons=218, athletes=118, 2023=34, 2024=80, 2025=104
+
+Decision:
+- CONDITIONAL GO: season-bounded, position-specific outcomes are feasible for WR/TE route opportunities and for DB tackle-plus-assist counts, but only within a specific role and after explicit validation.
+- This is not a universal outcome for all Combine athletes and should not be treated as a general NFL performance target across the full cohort.
+- No single defensible target exists today for the full 2023-2025 Combine sample without either a position-specific target pipeline or a curated season-by-season outcome table.
+- The current data support a more limited use case: bounded role-specific outcomes for pass-catchers or defenders, not a single cross-position prediction target.
+
+Risks and caveats:
+- player_play rows are not equivalent to snaps or routes for all players; the schema does not encode a universal 'snap count' field.
+- route_ran is meaningful for pass routes, but team play design, target share, and role still create selection effects.
+- season-level counts can vary by team usage and injury recovery; they are a better bounded outcome than career totals but remain imperfect proxies.
+- Any future modeling must keep all target construction and filtering within the season-specific frame and avoid leaking future season information into earlier cohorts.

@@ -1,0 +1,17 @@
+scope,group,starting_population,matched_population,match_rate,n_missing,missing_fraction,is_cumulative,observation_window
+outcome,career_offensive_snaps,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,career_defensive_snaps,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,career_special_teams_snaps,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,career_games_active,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,career_games_started,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,ap_all_pro_1st_team,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,ap_all_pro_2nd_team,510,510,1.0,0.0,0.0,True,lifetime career total
+outcome,pro_bowl_original_ballot,510,510,1.0,0.0,0.0,True,lifetime career total
+draft_year,2023,160,160,1.0,,,,
+draft_year,2024,177,177,1.0,,,,
+draft_year,2025,173,173,1.0,,,,
+combine_position,DB,122,122,1.0,,,,
+combine_position,DL,118,118,1.0,,,,
+combine_position,OL,121,121,1.0,,,,
+combine_position,TE,42,42,1.0,,,,
+combine_position,WR,107,107,1.0,,,,

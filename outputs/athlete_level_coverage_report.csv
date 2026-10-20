@@ -1,0 +1,8 @@
+feature_name,n_athletes_with_value,n_athletes_total,coverage,missing_fraction
+db_backpedal_transition_speed,122,510,0.23921568627450981,0.7607843137254902
+early_accel_1s,510,510,1.0,0.0
+max_speed,510,510,1.0,0.0
+net_displacement_yd,510,510,1.0,0.0
+path_length_yd,510,510,1.0,0.0
+signed_max_decel,510,510,1.0,0.0
+time_to_90pct_max_speed_s,510,510,1.0,0.0

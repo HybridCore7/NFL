@@ -1,0 +1,37 @@
+Phase 17 — Recover a Defensible Combine-to-NFL Experiment
+========================================================
+
+Feasibility gate:
+- Minimum rule: at least 60 complete-case athletes in the minimal conventional baseline and at least 15 test-set athletes before a comparison is considered stable enough to report.
+- Rationale: the prior Phase 16 failure was caused by dropping most of the sample when using the full conventional baseline. This recovery keeps the model small, uses the same athletes in both models, and avoids a test split that is too small to support a meaningful comparison.
+
+2025 WR cohort audit:
+- WR athlete-season records: 94
+- Feature coverage by metric:
+  * conventional bench_reps: 26/94 non-missing (27.7%)
+  * conventional broad_jump: 83/94 non-missing (88.3%)
+  * conventional combine_height: 94/94 non-missing (100.0%)
+  * conventional combine_weight: 94/94 non-missing (100.0%)
+  * conventional forty: 85/94 non-missing (90.4%)
+  * conventional short_shuttle: 30/94 non-missing (31.9%)
+  * conventional ten_yd_split: 85/94 non-missing (90.4%)
+  * conventional three_cone: 26/94 non-missing (27.7%)
+  * conventional vertical: 84/94 non-missing (89.4%)
+  * movement early_accel_1s_median: 94/94 non-missing (100.0%)
+  * movement max_speed_median: 94/94 non-missing (100.0%)
+  * movement net_displacement_yd_median: 94/94 non-missing (100.0%)
+  * movement path_length_yd_median: 94/94 non-missing (100.0%)
+  * movement signed_max_decel_median: 94/94 non-missing (100.0%)
+  * movement time_to_90pct_max_speed_s_median: 94/94 non-missing (100.0%)
+
+Candidate complete-case sets:
+  * all_conventional: 8 complete cases across 9 features
+  * minimal_conventional: 78 complete cases across 6 features
+  * minimal_extended: 78 complete cases across 12 features
+
+Feasibility status:
+- PASS: total complete cases=78 >= 60; test cases=16 >= 15
+- Baseline MAE=34.504, RMSE=39.639, R2=-0.130
+- Extended MAE=33.505, RMSE=42.606, R2=-0.305
+- Interpretation: the minimal comparison is feasible but still small and unstable; it is a bounded, descriptive check rather than proof of causal scouting value.
+- Decision: CONDITIONAL GO. A defensible experiment can be reported, but only with the caveat that the sample is limited and the result is not generalizable beyond the 2025 WR cohort.

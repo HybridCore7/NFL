@@ -1,0 +1,59 @@
+Phase 14 — Outcome target validation audit
+========================================
+
+Purpose:
+- Validate whether the supplied performance labels are a defensible target for Combine-to-NFL analysis without leaking future information or comparing unequal exposure cohorts as if they were equivalent.
+- This is a target-validation audit only; no model was trained or features were added.
+
+Source files inspected:
+- data/player_career_successes.csv
+- data/players.csv
+- data/combine_results.csv
+- existing validated reports under outputs, including the athlete-level analysis summary.
+
+Schema summary:
+- player_career_successes.csv: nfl_id plus lifetime aggregate career outcome columns.
+- players.csv: nfl_id, display_name, draft_year, nfl_position, draft slot metadata.
+- combine_results.csv: draft_year, nfl_id, combine_position, athletic metrics, and no season-by-season target fields.
+
+Outcome definitions:
+- career_offensive_snaps: unit=snaps, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=297, positive=213, median=0.0, max=3303.0
+- career_defensive_snaps: unit=snaps, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=317, positive=193, median=0.0, max=2666.0
+- career_special_teams_snaps: unit=snaps, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=108, positive=402, median=53.0, max=957.0
+- career_games_active: unit=games, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=88, positive=422, median=17.0, max=51.0
+- career_games_started: unit=games, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=208, positive=302, median=2.0, max=50.0
+- ap_all_pro_1st_team: unit=selections, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=504, positive=6, median=0.0, max=1.0
+- ap_all_pro_2nd_team: unit=selections, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=508, positive=2, median=0.0, max=1.0
+- pro_bowl_original_ballot: unit=selections, cumulative=True, observation_window=lifetime career total, non_missing=510, missing=0, missing_fraction=0.000, zero=499, positive=11, median=0.0, max=2.0
+
+Cohort matching audit:
+- Starting population: 510 Combine athletes in data/combine_results.csv.
+- Matched population: 510 athletes with a valid nfl_id in data/player_career_successes.csv.
+- Match rate: 100.0% across the entire Combine sample.
+- Draft year 2023: start=160, matched=160, match_rate=1.000
+- Draft year 2024: start=177, matched=177, match_rate=1.000
+- Draft year 2025: start=173, matched=173, match_rate=1.000
+- Position DB: start=122, matched=122, match_rate=1.000
+- Position DL: start=118, matched=118, match_rate=1.000
+- Position OL: start=121, matched=121, match_rate=1.000
+- Position TE: start=42, matched=42, match_rate=1.000
+- Position WR: start=107, matched=107, match_rate=1.000
+
+Exposure limitations by draft cohort:
+- The supplied outcome table is cumulative across a player’s career, not season-specific.
+- This creates unequal exposure across draft cohorts because the data snapshot favors older cohorts: 2023 has up to three seasons available, 2024 up to two, and 2025 only one.
+- Raw career totals are therefore not directly comparable across 2023/2024/2025 without setting a common observation window or explicit censoring.
+- 2023: starting_population=160, max_possible_seasons_observed=3; 2023 cohort: earliest draft class; up to three seasons available in the current snapshot.
+- 2024: starting_population=177, max_possible_seasons_observed=2; 2024 cohort: intermediate draft class; up to two seasons available in the current snapshot.
+- 2025: starting_population=173, max_possible_seasons_observed=1; 2025 cohort: most recent draft class; only one season available in the current snapshot.
+
+Leakage and selection-risk assessment:
+- No leakage was introduced by the key matching step: nfl_id is the direct identifier and the combined athlete table covers the full sample.
+- The substantive risk is not identifier leakage but target mis-specification: lifetime totals encode differing exposure lengths and are not equivalent across cohorts.
+- Missingness is low in the supplied outcome table, but a missing value is not the same as zero production; the dataset does not encode an athlete’s future exposure timeline or season-level availability.
+- These labels should not be treated as direct, cohort-balanced targets without a fixed observation window or explicit censoring logic.
+
+Recommendation:
+- No-go for a direct end-to-end target from the current table as-is.
+- A defensible next phase would require a fixed-window or censoring-aware target built from season-by-season exposure records or a curated retrospective outcome table that explicitly uses a common observation window for all cohorts.
+- The evidence missing from the supplied files is a season-level target table with consistent exposure definitions across cohorts; without that, any direct career-total regression or ranking analysis is methodologically biased.

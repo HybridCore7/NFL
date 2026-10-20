@@ -1,0 +1,56 @@
+Phase 19 — Research Direction and Outcome Design Gate
+====================================================
+
+Project history summary:
+- The project began by auditing the data schema, join keys, and data quality risks before trusting any analysis.
+- It validated the Combine movement extraction pipeline and then built athlete-level movement summaries and descriptive position-level profiles.
+- It explicitly rejected unsupported route-transfer claims between Combine movement and NFL route semantics.
+- It audited outcome targets and rejected raw lifetime totals as non-comparable global targets.
+- It tested a bounded season-specific WR outcome approach and found the sample insufficient for a defensible model comparison.
+- It closed with an evidence-based stop: descriptive analysis is valid, while predictive modeling remains intentionally deferred.
+
+Research question reconstruction:
+- Original competition objective: assess whether Combine athletic measurements and movement-derived features contain information relevant to future NFL performance.
+- Current hypothesis: a defensible subset of Combine movement features may add signal beyond standard Combine measures for a narrow 2025 WR opportunity target.
+- Supported by evidence: movement features are fully available for the 2025 WR sample, and the athlete-level movement pipeline is validated and descriptive.
+- Unsupported: broad claims that Combine movement has general predictive value for NFL success; any model-level causal claim; any route-transfer equivalence claim between Combine movement and NFL route semantics.
+- Disproven: a broad lifetime career-total target and a full conventional baseline that includes three_cone, short_shuttle, and bench_reps are not defensible in this dataset.
+
+Outcome audit (source-data validation):
+- player_play.csv is a play-level table keyed by game_id, nfl_id, and play_id; it is not a pre-aggregated athlete-season table.
+- target is a binary indicator of whether a row records a target, not a validated receptions or route count field in the raw schema.
+- route_ran is a route label field, not an independent measure of actual snaps, receiving volume, or route opportunity across all players and positions.
+- player_career_successes.csv holds lifetime cumulative career totals and is therefore not exposure-normalized across draft cohorts.
+- players.csv and games.csv provide athlete identity, draft year, and season metadata, but no season-specific complete outcome table for the full Combine sample.
+
+Candidate outcomes:
+- career_offensive_snaps: source=player_career_successes.csv / career_offensive_snaps; unit=snaps; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=participation; exposure_adjusted=False
+- career_defensive_snaps: source=player_career_successes.csv / career_defensive_snaps; unit=snaps; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=participation; exposure_adjusted=False
+- career_special_teams_snaps: source=player_career_successes.csv / career_special_teams_snaps; unit=snaps; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=participation; exposure_adjusted=False
+- career_games_active: source=player_career_successes.csv / career_games_active; unit=games; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=participation; exposure_adjusted=False
+- career_games_started: source=player_career_successes.csv / career_games_started; unit=games; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=participation; exposure_adjusted=False
+- ap_all_pro_1st_team: source=player_career_successes.csv / ap_all_pro_1st_team; unit=selections; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=success; exposure_adjusted=False
+- ap_all_pro_2nd_team: source=player_career_successes.csv / ap_all_pro_2nd_team; unit=selections; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=success; exposure_adjusted=False
+- pro_bowl_original_ballot: source=player_career_successes.csv / pro_bowl_original_ballot; unit=selections; level=athlete-lifetime; window=career total; coverage=510/510 (100.0%); category=success; exposure_adjusted=False
+- route_count_wr: source=player_play.csv / route_ran; unit=plays with route_ran populated; level=athlete-season; window=season; coverage=199/106 (100.0%); category=opportunity; exposure_adjusted=False
+- target_count_wr: source=player_play.csv / target; unit=target count; level=athlete-season; window=season; coverage=199/106 (100.0%); category=opportunity; exposure_adjusted=False
+
+Research options:
+- A. Descriptive Combine movement profile by position: sample=510; feasibility=Feasible; risks=Descriptive only; no outcome target, no causal claim, no predictive translation.; relevance=High for athlete profiling with clear caveats.
+- B. Season-bounded Combine-to-NFL association using a validated role-specific outcome: sample=94; feasibility=Conditionally feasible if target semantics are explicitly validated and exposure is bounded.; risks=Target is an opportunity proxy, not a true route count; role-specific; exposure still limited.; relevance=Moderate, still bounded and not generalizable.
+- C. Predictive model comparing conventional metrics and movement features: sample=78; feasibility=Not currently justified; risks=Target proxy, tiny sample, unstable train/test split, no defensible improvement signal, no external validation.; relevance=Low; weak evidence and high model risk.
+
+Decision criteria for a predictive phase:
+- target must be validated as a clear football outcome, not merely a proxy
+- usable sample must be large enough for stable train/test evaluation
+- missingness must remain manageable without arbitrary imputation at the full-cohort level
+- exposure and season comparability must be explicit and bounded
+- train/test design must avoid leakage and preserve the same athlete set across model comparisons
+- result must be interpretable as a bounded analysis, not a broad scouting claim
+
+Recommendation:
+- The strongest defensible direction is descriptive analysis of validated Combine movement profiles by position, using the athlete-level movement features that have already been checked for measurement validity.
+- The current predictive model question is not ready for a new modeling phase because the target remains a bounded opportunity proxy, the sample is modest, the split is small, and the repeated split evidence is unstable.
+- Do not force a model. Narrow descriptive analysis and a clearer outcome design are the evidence-supported next steps.
+
+GO: DESCRIPTIVE ANALYSIS

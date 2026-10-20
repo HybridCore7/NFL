@@ -1,0 +1,40 @@
+Phase 13 — Position-specific movement profiles
+===========================================
+Verified feature support:
+
+- WR athletes retained: 107
+- DB athletes retained: 122
+- Movement features used: early_accel_1s_median, max_speed_median, time_to_90pct_max_speed_s_median, path_length_yd_median, net_displacement_yd_median, signed_max_decel_median
+- Excluded: three-cone cut metrics, because real-data coverage remains too limited for a defensible position-wise descriptive analysis.
+- Conventional baseline: combine height, weight, 40-yard time, vertical, broad jump, ten-yard split, short shuttle, bench reps.
+- Draft capital was not used as an athletic measurement.
+
+Selected profile summary:
+- Strongest movement candidates (relative to conventional baseline):
+  * DB | nfl_id=57270 | draft_year=2024 | movement_profile_score=0.492
+  * DB | nfl_id=57278 | draft_year=2024 | movement_profile_score=0.451
+  * DB | nfl_id=56023 | draft_year=2023 | movement_profile_score=0.193
+- Weakest movement candidates (relative to conventional baseline):
+  * DB | nfl_id=58305 | draft_year=2025 | movement_profile_score=-0.492
+  * DB | nfl_id=56347 | draft_year=2023 | movement_profile_score=-0.433
+  * DB | nfl_id=57261 | draft_year=2024 | movement_profile_score=-0.218
+
+Uncertainty summary (mean residual z across valid athletes, bootstrap CI):
+- DB early_accel_1s_median: mean=0.000 95% CI [-0.579, 0.613]
+- DB max_speed_median: mean=0.000 95% CI [-0.579, 0.613]
+- DB net_displacement_yd_median: mean=0.000 95% CI [-0.579, 0.613]
+- DB path_length_yd_median: mean=-0.000 95% CI [-0.613, 0.579]
+- DB signed_max_decel_median: mean=-0.000 95% CI [-0.579, 0.613]
+- DB time_to_90pct_max_speed_s_median: mean=0.000 95% CI [-0.613, 0.579]
+- WR early_accel_1s_median: mean=0.000 95% CI [-0.576, 0.496]
+- WR max_speed_median: mean=-0.000 95% CI [-0.588, 0.526]
+- WR net_displacement_yd_median: mean=-0.000 95% CI [-0.600, 0.531]
+- WR path_length_yd_median: mean=-0.000 95% CI [-0.584, 0.528]
+- WR signed_max_decel_median: mean=0.000 95% CI [-0.558, 0.531]
+- WR time_to_90pct_max_speed_s_median: mean=-0.000 95% CI [-0.473, 0.545]
+
+Limitations:
+- This is a descriptive comparison, not a prediction study.
+- There is no valid NFL outcome target in the current minimal analysis; no claim is made about future performance or hidden star status.
+- The analysis intentionally avoids arbitrary thresholding and only flags the most extreme 10% of the within-position residual distribution as candidate profiles.
+- The DB backpedal transition feature remains low coverage and was not used in the primary position-wise comparison.

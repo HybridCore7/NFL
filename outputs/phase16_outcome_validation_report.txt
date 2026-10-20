@@ -1,0 +1,20 @@
+Phase 16 — Outcome validation and incremental predictive value
+==============================================================
+
+Validated sample:
+- WR athletes in the 2025 season: 94
+- Mean route count: 203.66
+- Mean target count: 38.63
+
+Experiment design:
+- Baseline uses the conventional Combine metrics only.
+- Extended model adds the validated movement features from the athlete-level output.
+- The same athlete set and deterministic split are used for both models.
+- This remains a narrow WR-2025 check, not a general NFL success model.
+
+Results:
+- No valid experiment could be run with the current filtered WR sample.
+
+Decision:
+- A single-season WR outcome check is defensible as a bounded incremental-value experiment.
+- A broad cross-position or lifetime-success model remains unsupported by the available targets and cohort coverage.

@@ -1,0 +1,5 @@
+candidate_name,position_scope,unit,formula,observation_window,n_unique_athlete_seasons,n_unique_combine_athletes,coverage_2023,coverage_2024,coverage_2025,scope,note
+wr_route_count_season,WR,routes,count(route_ran not null),player-season,199,106,39,66,94,WR on a given season,route_ran non-null rows
+wr_target_count_season,WR,targets,sum(target==1),player-season,199,106,39,66,94,WR on a given season,player_play target flag
+te_route_count_season,TE,routes,count(route_ran not null),player-season,71,38,11,24,36,TE on a given season,route_ran non-null rows
+db_tackle_plus_assist_count_season,DB,tackles_plus_assists,sum(tackle + assist),player-season,218,118,34,80,104,DB on a given season,player_play tackle and assist counts
