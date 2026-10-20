@@ -1,0 +1,11 @@
+
+# Large NFL tracking datasets
+data/game_tracking_2025.csv
+data/game_tracking_2024.csv
+data/game_tracking_2023.csv
+data/player_play.csv
+data/combine_tracking.csv
+
+# Python generated files
+__pycache__/
+*.py[cod]
